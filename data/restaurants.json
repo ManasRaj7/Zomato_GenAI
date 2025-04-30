@@ -1,0 +1,82 @@
+[
+  {
+    "restaurant_name": "Vegan Hub Indiranagar",
+    "location": "Indiranagar, Bangalore",
+    "operating_hours": "11:00 AM - 11:00 PM",
+    "rating": "4.5",
+    "price_range": "\u20b9\u20b9",
+    "menu_items": [
+      {
+        "name": "Vegan Burger",
+        "price": "\u20b9250",
+        "description": "Plant-based patty with fresh vegetables"
+      },
+      {
+        "name": "Tofu Scramble",
+        "price": "\u20b9200",
+        "description": "Scrambled tofu with herbs and spices"
+      }
+    ],
+    "features": {
+      "cuisines": [
+        "Vegan",
+        "International"
+      ],
+      "amenities": [
+        "Outdoor Seating",
+        "Takeaway"
+      ],
+      "dietary_options": [
+        "Vegan",
+        "Gluten-Free"
+      ]
+    },
+    "reviews": [
+      {
+        "rating": "5.0",
+        "comment": "Best vegan food in Bangalore!",
+        "user": "John D."
+      }
+    ]
+  },
+  {
+    "restaurant_name": "Vegan Hub Koramangala",
+    "location": "Koramangala, Bangalore",
+    "operating_hours": "10:00 AM - 10:00 PM",
+    "rating": "4.3",
+    "price_range": "\u20b9\u20b9",
+    "menu_items": [
+      {
+        "name": "Vegan Pizza",
+        "price": "\u20b9300",
+        "description": "Plant-based cheese and fresh toppings"
+      },
+      {
+        "name": "Quinoa Bowl",
+        "price": "\u20b9280",
+        "description": "Protein-rich quinoa with vegetables"
+      }
+    ],
+    "features": {
+      "cuisines": [
+        "Vegan",
+        "Italian"
+      ],
+      "amenities": [
+        "Indoor Seating",
+        "Delivery"
+      ],
+      "dietary_options": [
+        "Vegan",
+        "Nut-Free"
+      ]
+    },
+    "reviews": [
+      {
+        "rating": "4.5",
+        "comment": "Great vegan options!",
+        "user": "Sarah M."
+      }
+    ]
+  }
+]
