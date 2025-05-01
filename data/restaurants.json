@@ -1,81 +1,152 @@
 [
   {
-    "restaurant_name": "Vegan Hub Indiranagar",
+    "restaurant_name": "BBQ Nation",
     "location": "Indiranagar, Bangalore",
-    "operating_hours": "11:00 AM - 11:00 PM",
-    "rating": "4.5",
-    "price_range": "\u20b9\u20b9",
+    "operating_hours": "12:00 PM - 11:00 PM",
+    "rating": "4.4",
+    "price_range": "\u20b9\u20b9\u20b9",
     "menu_items": [
       {
-        "name": "Vegan Burger",
-        "price": "\u20b9250",
-        "description": "Plant-based patty with fresh vegetables"
+        "name": "Chicken Tikka",
+        "price": "\u20b9350",
+        "description": "Tender chicken pieces marinated in spices and grilled",
+        "category": "Non-Veg"
       },
       {
-        "name": "Tofu Scramble",
-        "price": "\u20b9200",
-        "description": "Scrambled tofu with herbs and spices"
-      }
-    ],
-    "features": {
-      "cuisines": [
-        "Vegan",
-        "International"
-      ],
-      "amenities": [
-        "Outdoor Seating",
-        "Takeaway"
-      ],
-      "dietary_options": [
-        "Vegan",
-        "Gluten-Free"
-      ]
-    },
-    "reviews": [
+        "name": "Mutton Seekh Kebab",
+        "price": "\u20b9400",
+        "description": "Minced mutton mixed with spices and grilled on skewers",
+        "category": "Non-Veg"
+      },
       {
-        "rating": "5.0",
-        "comment": "Best vegan food in Bangalore!",
-        "user": "John D."
-      }
-    ]
-  },
-  {
-    "restaurant_name": "Vegan Hub Koramangala",
-    "location": "Koramangala, Bangalore",
-    "operating_hours": "10:00 AM - 10:00 PM",
-    "rating": "4.3",
-    "price_range": "\u20b9\u20b9",
-    "menu_items": [
-      {
-        "name": "Vegan Pizza",
+        "name": "Paneer Tikka",
         "price": "\u20b9300",
-        "description": "Plant-based cheese and fresh toppings"
-      },
-      {
-        "name": "Quinoa Bowl",
-        "price": "\u20b9280",
-        "description": "Protein-rich quinoa with vegetables"
+        "description": "Cottage cheese marinated in spices and grilled",
+        "category": "Veg"
       }
     ],
     "features": {
       "cuisines": [
-        "Vegan",
-        "Italian"
+        "North Indian",
+        "BBQ",
+        "Mughlai"
       ],
       "amenities": [
-        "Indoor Seating",
-        "Delivery"
+        "Live Grill",
+        "Buffet",
+        "Family Seating"
       ],
       "dietary_options": [
-        "Vegan",
-        "Nut-Free"
+        "Vegetarian",
+        "Non-Vegetarian"
       ]
     },
     "reviews": [
       {
         "rating": "4.5",
-        "comment": "Great vegan options!",
-        "user": "Sarah M."
+        "comment": "Best BBQ experience in town!",
+        "user": "Rahul S."
+      }
+    ]
+  },
+  {
+    "restaurant_name": "Absolute Barbecue",
+    "location": "Koramangala, Bangalore",
+    "operating_hours": "12:00 PM - 11:30 PM",
+    "rating": "4.6",
+    "price_range": "\u20b9\u20b9\u20b9\u20b9",
+    "menu_items": [
+      {
+        "name": "Prawns Peri Peri",
+        "price": "\u20b9450",
+        "description": "Juicy prawns marinated in peri peri sauce",
+        "category": "Non-Veg"
+      },
+      {
+        "name": "Fish Tandoori",
+        "price": "\u20b9380",
+        "description": "Fresh fish marinated in tandoori spices",
+        "category": "Non-Veg"
+      },
+      {
+        "name": "Veg Platter",
+        "price": "\u20b9320",
+        "description": "Assorted grilled vegetables with dips",
+        "category": "Veg"
+      }
+    ],
+    "features": {
+      "cuisines": [
+        "Continental",
+        "BBQ",
+        "Seafood"
+      ],
+      "amenities": [
+        "Live Counter",
+        "Dessert Counter",
+        "Bar"
+      ],
+      "dietary_options": [
+        "Vegetarian",
+        "Non-Vegetarian",
+        "Seafood"
+      ]
+    },
+    "reviews": [
+      {
+        "rating": "4.7",
+        "comment": "Amazing variety of grilled items!",
+        "user": "Priya M."
+      }
+    ]
+  },
+  {
+    "restaurant_name": "The Black Pearl",
+    "location": "Whitefield, Bangalore",
+    "operating_hours": "11:00 AM - 11:00 PM",
+    "rating": "4.5",
+    "price_range": "\u20b9\u20b9\u20b9\u20b9",
+    "menu_items": [
+      {
+        "name": "Butter Chicken",
+        "price": "\u20b9420",
+        "description": "Tender chicken in rich tomato gravy",
+        "category": "Non-Veg"
+      },
+      {
+        "name": "Mutton Rogan Josh",
+        "price": "\u20b9480",
+        "description": "Mutton curry in aromatic spices",
+        "category": "Non-Veg"
+      },
+      {
+        "name": "Dal Makhani",
+        "price": "\u20b9280",
+        "description": "Creamy black lentils cooked overnight",
+        "category": "Veg"
+      }
+    ],
+    "features": {
+      "cuisines": [
+        "North Indian",
+        "Mughlai",
+        "Punjabi"
+      ],
+      "amenities": [
+        "Live Music",
+        "Private Dining",
+        "Valet Parking"
+      ],
+      "dietary_options": [
+        "Vegetarian",
+        "Non-Vegetarian"
+      ]
+    },
+    "reviews": [
+      {
+        "rating": "4.6",
+        "comment": "Authentic North Indian flavors!",
+        "user": "Amit K."
       }
     ]
   }

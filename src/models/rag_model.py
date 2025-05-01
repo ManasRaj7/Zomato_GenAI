@@ -42,14 +42,14 @@ class RAGModel:
             ]) + "\n"
         
         # Construct the full prompt
-        prompt = f"""You are a helpful restaurant information assistant. Use the following context to answer the user's question. If the answer cannot be found in the context, say so.
+        prompt = f"""<s>[INST] You are a helpful restaurant information assistant. Use the following context to answer the user's question. If the answer cannot be found in the context, say so.
 
 Context:
 {context_str}
 
 {history_str}User: {query}
 
-Assistant:"""
+Assistant:[/INST]"""
         return prompt
 
     def _call_model(self, prompt: str) -> str:
@@ -58,7 +58,15 @@ Assistant:"""
             response = requests.post(
                 self.api_url,
                 headers=self.headers,
-                json={"inputs": prompt, "parameters": {"max_new_tokens": 500}}
+                json={
+                    "inputs": prompt,
+                    "parameters": {
+                        "max_new_tokens": 500,
+                        "temperature": 0.7,
+                        "top_p": 0.95,
+                        "repetition_penalty": 1.1
+                    }
+                }
             )
             response.raise_for_status()
             return response.json()[0]["generated_text"].split("Assistant:")[-1].strip()
@@ -87,7 +95,8 @@ Assistant:"""
         sources = [
             {
                 "text": chunk["text"],
-                "metadata": chunk["metadata"]
+                "metadata": chunk["metadata"],
+                "score": chunk["score"]
             }
             for chunk in context
         ]

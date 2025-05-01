@@ -1,22 +1,10 @@
 import json
-import pandas as pd
 from typing import List, Dict, Any
-from sentence_transformers import SentenceTransformer
-import faiss
-import numpy as np
-import sys
 from pathlib import Path
 
-# Add the src directory to Python path
-src_path = str(Path(__file__).parent.parent.parent)
-if src_path not in sys.path:
-    sys.path.append(src_path)
-
 class KnowledgeBase:
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
-        """Initialize the knowledge base with a sentence transformer model."""
-        self.model = SentenceTransformer(model_name)
-        self.index = None
+    def __init__(self):
+        """Initialize the knowledge base."""
         self.documents = []
         self.metadata = []
         
@@ -43,6 +31,8 @@ class KnowledgeBase:
         basic_info = f"Restaurant: {restaurant.get('restaurant_name', 'Unknown')}\n"
         basic_info += f"Location: {restaurant.get('location', 'Unknown')}\n"
         basic_info += f"Operating Hours: {restaurant.get('operating_hours', 'Unknown')}\n"
+        basic_info += f"Rating: {restaurant.get('rating', 'Unknown')}\n"
+        basic_info += f"Price Range: {restaurant.get('price_range', 'Unknown')}\n"
         chunks.append(basic_info)
         metadata.append({
             "type": "basic_info",
@@ -64,51 +54,62 @@ class KnowledgeBase:
                 "restaurant": restaurant.get('restaurant_name', 'Unknown')
             })
         
-        # Special features chunk
-        if restaurant.get('special_features'):
-            features_text = f"Special Features for {restaurant.get('restaurant_name', 'Unknown')}:\n"
-            features_text += restaurant['special_features']
+        # Features chunk
+        if restaurant.get('features'):
+            features_text = f"Features for {restaurant.get('restaurant_name', 'Unknown')}:\n"
+            for key, value in restaurant['features'].items():
+                if isinstance(value, list):
+                    features_text += f"{key}: {', '.join(value)}\n"
+                else:
+                    features_text += f"{key}: {value}\n"
             chunks.append(features_text)
             metadata.append({
                 "type": "features",
                 "restaurant": restaurant.get('restaurant_name', 'Unknown')
             })
             
-        return {"chunks": chunks, "metadata": metadata}
-    
-    def build_index(self) -> None:
-        """Build FAISS index from processed documents."""
-        if not self.documents:
-            raise ValueError("No documents to index. Process data first.")
-            
-        # Generate embeddings
-        embeddings = self.model.encode(self.documents)
-        
-        # Create FAISS index
-        dimension = embeddings.shape[1]
-        self.index = faiss.IndexFlatL2(dimension)
-        self.index.add(embeddings.astype('float32'))
-        
-    def search(self, query: str, k: int = 3) -> List[Dict[str, Any]]:
-        """Search the knowledge base for relevant information."""
-        if not self.index:
-            raise ValueError("Index not built. Call build_index() first.")
-            
-        # Generate query embedding
-        query_embedding = self.model.encode([query])
-        
-        # Search the index
-        distances, indices = self.index.search(query_embedding.astype('float32'), k)
-        
-        # Return results with metadata
-        results = []
-        for idx, distance in zip(indices[0], distances[0]):
-            results.append({
-                "text": self.documents[idx],
-                "metadata": self.metadata[idx],
-                "score": float(1 / (1 + distance))  # Convert distance to similarity score
+        # Reviews chunk
+        if restaurant.get('reviews'):
+            reviews_text = f"Reviews for {restaurant.get('restaurant_name', 'Unknown')}:\n"
+            for review in restaurant['reviews'][:5]:  # Limit to top 5 reviews
+                reviews_text += f"Rating: {review.get('rating', 'Unknown')}\n"
+                reviews_text += f"Comment: {review.get('comment', 'No comment')}\n"
+                reviews_text += f"User: {review.get('user', 'Anonymous')}\n\n"
+            chunks.append(reviews_text)
+            metadata.append({
+                "type": "reviews",
+                "restaurant": restaurant.get('restaurant_name', 'Unknown')
             })
             
+        return {"chunks": chunks, "metadata": metadata}
+    
+    def search(self, query: str, k: int = 3) -> List[Dict[str, Any]]:
+        """Simple keyword-based search."""
+        if not self.documents:
+            raise ValueError("No documents to search. Process data first.")
+        
+        # Convert query to lowercase for case-insensitive search
+        query = query.lower()
+        
+        # Score documents based on keyword matches
+        scores = []
+        for doc in self.documents:
+            # Count how many query words appear in the document
+            score = sum(1 for word in query.split() if word in doc.lower())
+            scores.append(score)
+        
+        # Get top k results
+        top_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)[:k]
+        
+        results = []
+        for idx in top_indices:
+            if scores[idx] > 0:  # Only include results with some match
+                results.append({
+                    "text": self.documents[idx],
+                    "metadata": self.metadata[idx],
+                    "score": scores[idx]
+                })
+        
         return results
     
     def save(self, path: str) -> None:
@@ -122,10 +123,6 @@ class KnowledgeBase:
         with open(save_path / "metadata.json", "w") as f:
             json.dump(self.metadata, f)
             
-        # Save FAISS index
-        if self.index:
-            faiss.write_index(self.index, str(save_path / "index.faiss"))
-            
     def load(self, path: str) -> None:
         """Load the knowledge base from disk."""
         load_path = Path(path)
@@ -135,8 +132,3 @@ class KnowledgeBase:
             self.documents = json.load(f)
         with open(load_path / "metadata.json", "r") as f:
             self.metadata = json.load(f)
-            
-        # Load FAISS index
-        index_path = load_path / "index.faiss"
-        if index_path.exists():
-            self.index = faiss.read_index(str(index_path))

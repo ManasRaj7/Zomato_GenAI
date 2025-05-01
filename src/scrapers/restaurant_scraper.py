@@ -20,7 +20,7 @@ class RestaurantScraper:
     def __init__(self):
         """Initialize the scraper with necessary configurations."""
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
         self.base_url = "https://www.zomato.com"
         self.setup_logging()
@@ -188,4 +188,207 @@ class RestaurantScraper:
                 all_data.append(restaurant_data)
                 
         self.save_data(all_data, output_path)
-        return all_data 
+        return all_data
+
+    def create_sample_data(self):
+        """Create a more diverse sample dataset with both veg and non-veg options."""
+        restaurants = [
+            {
+                "restaurant_name": "BBQ Nation",
+                "location": "Indiranagar, Bangalore",
+                "operating_hours": "12:00 PM - 11:00 PM",
+                "rating": "4.4",
+                "price_range": "₹₹₹",
+                "menu_items": [
+                    {
+                        "name": "Chicken Tikka",
+                        "price": "₹350",
+                        "description": "Tender chicken pieces marinated in spices and grilled",
+                        "category": "Non-Veg"
+                    },
+                    {
+                        "name": "Mutton Seekh Kebab",
+                        "price": "₹400",
+                        "description": "Minced mutton mixed with spices and grilled on skewers",
+                        "category": "Non-Veg"
+                    },
+                    {
+                        "name": "Paneer Tikka",
+                        "price": "₹300",
+                        "description": "Cottage cheese marinated in spices and grilled",
+                        "category": "Veg"
+                    }
+                ],
+                "features": {
+                    "cuisines": ["North Indian", "BBQ", "Mughlai"],
+                    "amenities": ["Live Grill", "Buffet", "Family Seating"],
+                    "dietary_options": ["Vegetarian", "Non-Vegetarian"]
+                },
+                "reviews": [
+                    {
+                        "rating": "4.5",
+                        "comment": "Best BBQ experience in town!",
+                        "user": "Rahul S."
+                    }
+                ]
+            },
+            {
+                "restaurant_name": "Absolute Barbecue",
+                "location": "Koramangala, Bangalore",
+                "operating_hours": "12:00 PM - 11:30 PM",
+                "rating": "4.6",
+                "price_range": "₹₹₹₹",
+                "menu_items": [
+                    {
+                        "name": "Prawns Peri Peri",
+                        "price": "₹450",
+                        "description": "Juicy prawns marinated in peri peri sauce",
+                        "category": "Non-Veg"
+                    },
+                    {
+                        "name": "Fish Tandoori",
+                        "price": "₹380",
+                        "description": "Fresh fish marinated in tandoori spices",
+                        "category": "Non-Veg"
+                    },
+                    {
+                        "name": "Veg Platter",
+                        "price": "₹320",
+                        "description": "Assorted grilled vegetables with dips",
+                        "category": "Veg"
+                    }
+                ],
+                "features": {
+                    "cuisines": ["Continental", "BBQ", "Seafood"],
+                    "amenities": ["Live Counter", "Dessert Counter", "Bar"],
+                    "dietary_options": ["Vegetarian", "Non-Vegetarian", "Seafood"]
+                },
+                "reviews": [
+                    {
+                        "rating": "4.7",
+                        "comment": "Amazing variety of grilled items!",
+                        "user": "Priya M."
+                    }
+                ]
+            },
+            {
+                "restaurant_name": "The Black Pearl",
+                "location": "Whitefield, Bangalore",
+                "operating_hours": "11:00 AM - 11:00 PM",
+                "rating": "4.5",
+                "price_range": "₹₹₹₹",
+                "menu_items": [
+                    {
+                        "name": "Butter Chicken",
+                        "price": "₹420",
+                        "description": "Tender chicken in rich tomato gravy",
+                        "category": "Non-Veg"
+                    },
+                    {
+                        "name": "Mutton Rogan Josh",
+                        "price": "₹480",
+                        "description": "Mutton curry in aromatic spices",
+                        "category": "Non-Veg"
+                    },
+                    {
+                        "name": "Dal Makhani",
+                        "price": "₹280",
+                        "description": "Creamy black lentils cooked overnight",
+                        "category": "Veg"
+                    }
+                ],
+                "features": {
+                    "cuisines": ["North Indian", "Mughlai", "Punjabi"],
+                    "amenities": ["Live Music", "Private Dining", "Valet Parking"],
+                    "dietary_options": ["Vegetarian", "Non-Vegetarian"]
+                },
+                "reviews": [
+                    {
+                        "rating": "4.6",
+                        "comment": "Authentic North Indian flavors!",
+                        "user": "Amit K."
+                    }
+                ]
+            }
+        ]
+        
+        # Save the data
+        self.save_data(restaurants, "restaurants.json")
+        return restaurants
+        
+    def save_data(self, data, filename):
+        """Save data to JSON file."""
+        Path('data').mkdir(exist_ok=True)
+        with open(f'data/{filename}', 'w') as f:
+            json.dump(data, f, indent=2)
+            
+    def load_data(self, filename):
+        """Load data from JSON file."""
+        try:
+            with open(f'data/{filename}', 'r') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return None
+
+class SimpleScraper:
+    def __init__(self):
+        self.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        
+    def get_restaurant_data(self, url):
+        """Get basic restaurant data from Zomato."""
+        try:
+            response = requests.get(url, headers=self.headers)
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Extract basic info
+            data = {
+                'name': self._get_text(soup, 'h1'),
+                'location': self._get_text(soup, '.location'),
+                'rating': self._get_text(soup, '.rating-value'),
+                'cuisines': self._get_text(soup, '.cuisines'),
+                'price_range': self._get_text(soup, '.price-range'),
+                'menu': self._get_menu(soup)
+            }
+            
+            return data
+        except Exception as e:
+            print(f"Error scraping {url}: {str(e)}")
+            return None
+            
+    def _get_text(self, soup, selector):
+        """Helper to get text from selector."""
+        element = soup.select_one(selector)
+        return element.text.strip() if element else "Not found"
+        
+    def _get_menu(self, soup):
+        """Get basic menu items."""
+        menu_items = []
+        for item in soup.select('.menu-item'):
+            name = item.select_one('.item-name')
+            price = item.select_one('.item-price')
+            if name and price:
+                menu_items.append({
+                    'name': name.text.strip(),
+                    'price': price.text.strip()
+                })
+        return menu_items
+        
+    def save_data(self, data, filename):
+        """Save data to JSON file."""
+        Path('data').mkdir(exist_ok=True)
+        with open(f'data/{filename}', 'w') as f:
+            json.dump(data, f, indent=2)
+            
+    def load_data(self, filename):
+        """Load data from JSON file."""
+        try:
+            with open(f'data/{filename}', 'r') as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return None 
+
+if __name__ == "__main__":
+    scraper = RestaurantScraper()
+    scraper.create_sample_data() 

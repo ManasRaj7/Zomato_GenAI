@@ -60,7 +60,6 @@ class RestaurantPipeline:
         self.logger.info("Processing data into knowledge base...")
         try:
             self.knowledge_base.process_scraped_data(restaurants)
-            self.knowledge_base.build_index()
             
             # Save knowledge base
             kb_path = self.data_dir / "knowledge_base"
